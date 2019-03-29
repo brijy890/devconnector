@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import { connect } from "react-redux";
@@ -13,6 +12,21 @@ class Login extends Component {
       password: "",
       errors: {}
     };
+  }
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   }
 
   onChange = e => {
@@ -82,7 +96,7 @@ class Login extends Component {
   }
 }
 
-Login.PropTypes = {
+Login.propTypes = {
   loginUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
